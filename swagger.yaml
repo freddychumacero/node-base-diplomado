@@ -1,10 +1,19 @@
 openapi: 3.0.0
 info:
-  title: API con Express
+  title: API Diplomado Full Stack - Freddy Chumacero
   version: 1.0.0
-  description: Documentación de la API (Swagger + Express)
+  description: Documentación de la API (Swagger + Express) - Proyecto Final Diplomado
 servers:
+  - url: /
+    description: Servidor actual
   - url: http://localhost:3000
+    description: Desarrollo local
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 paths:
   /api/users:
     get:
