@@ -2,25 +2,48 @@ import { Sequelize } from "sequelize";
 import envs from "../config/index.js";
 import logger from "../logs/logger.js";
 
-const sequelize = new Sequelize(envs.DB_NAME, envs.DB_USER, envs.DB_PASSWORD, {
-  host: envs.DB_HOST,
-  port: envs.DB_PORT,
-  dialect: "postgres",
-  logging: false,
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
+let sequelize;
+
+// Usar DATABASE_URL si está disponible (Render), sino usar variables individuales
+if (process.env.DATABASE_URL) {
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: "postgres",
+    logging: false,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+      connectTimeout: 30000,
     },
-    connectTimeout: 30000,
-  },
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 60000,
-    idle: 10000,
-  },
-});
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 60000,
+      idle: 10000,
+    },
+  });
+} else {
+  sequelize = new Sequelize(envs.DB_NAME, envs.DB_USER, envs.DB_PASSWORD, {
+    host: envs.DB_HOST,
+    port: envs.DB_PORT,
+    dialect: "postgres",
+    logging: false,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+      connectTimeout: 30000,
+    },
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 60000,
+      idle: 10000,
+    },
+  });
+}
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
