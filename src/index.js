@@ -8,13 +8,18 @@ import "./models/User.js";
 import "./models/Task.js";
 
 const main = async () => {
-  // Conectar a la base de datos
-  await connectDB();
-
-  // Iniciar el servidor
+  // Iniciar el servidor primero (para que Render lo detecte como activo)
   app.listen(envs.PORT, () => {
     logger.info(`Server on port ${envs.PORT}`);
   });
+
+  // Luego conectar a la base de datos
+  try {
+    await connectDB();
+  } catch (error) {
+    logger.error("Error en conexión inicial a la BD:", error.message);
+  }
 };
 
 main();
+

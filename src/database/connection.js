@@ -23,7 +23,7 @@ export const connectDB = async () => {
     logger.info("Modelos sincronizados con la base de datos");
   } catch (error) {
     logger.error("Error al conectar con la base de datos:", error.message);
-    process.exit(1);
+    throw error;
   }
 };
 
